@@ -62,17 +62,6 @@ public class ScrapingRegionStrategy implements JsoupBase {
 
 					RegionProp regionProps = new RegionProp(region.getCode(), region.getTitle());
 
-					/*countries.stream().map(countryProp -> CountryDTO.createNewCountry(countryProp, regionProps))
-									  .forEach(countryService::testTransaction);*/
-					int i = 0;
-					for (CountryProp country : countries) {
-						i++;
-					if(i == 1) {
-						CountryDTO ctr = CountryDTO.createNewCountry(country, regionProps);
-						countryService.testTransaction(ctr);
-						break;
-					}
-					}
 
 					RegionDTO regionDTO = RegionDTO.createRegion(region.getCode(), regionProps, countries);
 

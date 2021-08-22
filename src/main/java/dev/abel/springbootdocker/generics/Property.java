@@ -9,7 +9,7 @@ import java.util.Comparator;
 @Data
 public class Property {
 
-		@Field( "code")
+		@Field("code")
 		@NonNull private final String code;
 		
 		@Field( "title")

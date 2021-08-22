@@ -1,9 +1,15 @@
 version: '3.7'
 services:
-   database:
-      container_name: mymongodb
+   db:
+      container_name: mongodb
       image: mongo
+      command: mongod --port 27018
       ports:
-         - "27018:27017"
-      hostname: mongo
-
+         - "27018:27018"
+      hostname: mongodb
+   api:
+      build: .
+      ports:
+         - "8080:8080"
+      depends_on:
+         - db

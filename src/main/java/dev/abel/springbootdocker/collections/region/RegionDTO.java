@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
-@Document(collection = "region-constant")
+@Document(collection = "regions")
 @Data
 public class RegionDTO {
 
