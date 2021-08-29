@@ -1,5 +1,6 @@
 package dev.abel.springbootdocker.utils;
 
+import dev.abel.springbootdocker.enums.utils.Url;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -57,6 +58,10 @@ public class MapperUtilsImpl implements MapperUtils {
 	@Override
 	public String addFormat(String old, String next) {
 		return String.format("%s %s", old, next);
+	}
+
+	public String generateUrl(String title) {
+		return String.format("%s%s", Url.equities, title);
 	}
 
 }

@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -28,9 +31,9 @@ public class SeleniumBase {
 
 	protected Wait<WebDriver> wait;
 
-	protected int TIMEOUT_MEDIUM = 9;
+	protected int TIMEOUT_MEDIUM = 12;
 
-	protected long POLLING_MEDIUM = 6;
+	protected long POLLING_MEDIUM = 2;
 
 	protected int IMPLICIT_MEDIUM = 8;
 
@@ -39,17 +42,17 @@ public class SeleniumBase {
 
 	private final static Logger log = LoggerFactory.getLogger(SeleniumBase.class);
 
-	protected void startSeleniumDriver() {
+	protected void startSeleniumDriver() throws URISyntaxException {
 
 		log.info(Msg.executor);
-		ChromeOptions chromeOptions= new ChromeOptions();
+/*		ChromeOptions chromeOptions= new ChromeOptions();
 		chromeOptions.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
-		
+*/
 		String chromeDriverPath = SeleniumBase.class.getClassLoader().getResource(ChromeDriverPathResource)
 				.getPath();
 		
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-		driver = new ChromeDriver(chromeOptions);
+		driver = new ChromeDriver();
 
 	}
 
@@ -58,9 +61,14 @@ public class SeleniumBase {
 		log.info(Msg.setUpDriver);
 		PageFactory.initElements(driver, this);
 
+		System.out.println(TIMEOUT_MEDIUM + "time out medium");
+		System.out.println(POLLING_MEDIUM + "polling meduium");
 		wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(TIMEOUT_MEDIUM))
 				.pollingEvery(Duration.ofSeconds(POLLING_MEDIUM))
-				.ignoring(org.openqa.selenium.NoSuchElementException.class);
+				.ignoring(org.openqa.selenium.NoSuchElementException.class)
+				.ignoring(org.openqa.selenium.TimeoutException.class);
+
+		System.out.println(wait.toString());
 	}
 
 	protected void closeSeleniumDriver() {
@@ -71,7 +79,6 @@ public class SeleniumBase {
 	private void changeImplicitWait(int value, TimeUnit timeUnit) {
 		driver.manage().timeouts().implicitlyWait(value, timeUnit);
 	}
-
 	private void restoreDefaultImplicitWait() {
 		driver.manage().timeouts().implicitlyWait(TIMEOUT_MEDIUM, TimeUnit.SECONDS);
 	}

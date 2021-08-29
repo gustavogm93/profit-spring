@@ -12,4 +12,5 @@ public interface MapperUtils {
 
 	public String addFormat(String old, String next);
 
+	public String generateUrl(String title);
 }

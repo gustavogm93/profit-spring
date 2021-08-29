@@ -1,9 +1,10 @@
 package dev.abel.springbootdocker.controller;
 
-import dev.abel.springbootdocker.scraping.ScrapingCountryStrategy;
-import dev.abel.springbootdocker.scraping.ScrapingCoverageStrategy;
 import dev.abel.springbootdocker.scraping.ScrapingRegionStrategy;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import dev.abel.springbootdocker.scraping.country.application.ScrapingHtml;
+import dev.abel.springbootdocker.scraping.country.domain.HtmlScraped;
+import dev.abel.springbootdocker.scraping.country.infrastructure.DataSourceService;
+import dev.abel.springbootdocker.scraping.country.infrastructure.HtmlScrapedService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -23,9 +23,11 @@ public class ScrapingController {
 
 	@Value("${chrome.driver.path}")
 	private String ChromeDriverPathResource;
-
+	private DataSourceService dataSourceService;
 	private ScrapingRegionStrategy scrapingRegion;
+	private HtmlScrapedService htmlScrapedService;
 
+	private ScrapingHtml scrapingHtml;
 	/*private ScrapingCountryStrategy scrapingCountry;
 	
 	 private ScrapingCoverageStrategy scrapingCoverageCountry;
@@ -38,8 +40,11 @@ public class ScrapingController {
 	}*/
 
 	@Autowired
-	public ScrapingController(ScrapingRegionStrategy scrapingRegion ) {
+	public ScrapingController(ScrapingRegionStrategy scrapingRegion,DataSourceService dataSourceService, HtmlScrapedService htmlScrapedService,  ScrapingHtml scrapingHtml) {
 		this.scrapingRegion = scrapingRegion;
+		this.dataSourceService = dataSourceService;
+		this.htmlScrapedService = htmlScrapedService;
+		this.scrapingHtml = scrapingHtml;
 	}
 
 
@@ -47,6 +52,31 @@ public class ScrapingController {
 	public void getRegionExtractedData() throws Exception, IOException {
 		scrapingRegion.executor();
 	}
+	@GetMapping("/normalize/data")
+	public void normalize() throws Exception, IOException {
+		dataSourceService.normalizeDataSource();
+	}
+
+	@GetMapping("/normalize/html")
+	public void normalizeHtml() throws Exception, IOException {
+		htmlScrapedService.normalizeHtmlScraped();
+	}
+
+	@GetMapping("/normalize/null")
+	public void normalizeNull() throws Exception, IOException {
+		List<HtmlScraped> un = htmlScrapedService.getHtmlUnncompleted();
+		System.out.println(un.size());
+	}
+
+	@GetMapping("/html")
+	public void getCoverageCountryExtractedData(@RequestParam( "region") String region) throws Exception {
+		scrapingHtml.executor(region);
+	}
+
+	/*@GetMapping("coverage/country")
+	public void getCoverageCountryExtractedData(@RequestParam( "region") String region) {
+		scrapingCoverageCountry.executor(region);
+	}*/
 /*
 	@GetMapping("/countries")
 	public void getCountryExtractedData(@RequestParam( "region") String region) {

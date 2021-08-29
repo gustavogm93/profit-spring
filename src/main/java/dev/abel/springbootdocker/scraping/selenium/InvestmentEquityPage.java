@@ -1,6 +1,7 @@
 package dev.abel.springbootdocker.scraping.selenium;
 
 import dev.abel.springbootdocker.enums.utils.Url;
+import org.apache.poi.ss.formula.eval.UnaryMinusEval;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,23 +27,26 @@ public class InvestmentEquityPage extends SeleniumBase {
 	
 	@FindBy(how = How.ID, using = "cross_rate_markets_stocks_1")
 	private WebElement tableMarket;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(InvestmentEquityPage.class);
 	
-	protected void goToCountryPage(String countryCode) {
+	protected void goToPage(String url) {
 		
-		log.info("ChromeDriver go to page of: {}", countryCode);
-		
-		driver.get(String.format("%s%s", Url.equities, countryCode));
+		log.info("ChromeDriver go to page : {}", url);
+
+		driver.get(url);
 	}
 
-	protected String getCountryId() {
+
+
+
+	protected String getCountryCode() {
 		
 		return spanCountryId.getAttribute("value");
 	}
 
 	
-	protected String getIdMarketIndex(WebElement optionMarketIndex) {
+	protected String getCodeMarketIndex(WebElement optionMarketIndex) {
 		
 		return optionMarketIndex.getAttribute("id");
 	}
@@ -64,11 +68,20 @@ public class InvestmentEquityPage extends SeleniumBase {
 		return shareElement.findElement(By.tagName("a")).getText();
 	}
 
-	protected String getShareId(WebElement shareElement) {		
+	protected String getShareFullTitle(WebElement shareElement) {
+
+		return shareElement.findElement(By.tagName("a")).getAttribute("title");
+	}
+
+	protected String getShareCode(WebElement shareElement) {
 
 		return shareElement.findElement(By.tagName("span")).getAttribute("data-id");
 	}
 
+	protected String getShareUrl(WebElement shareElement) {
+
+		return shareElement.findElement(By.tagName("a")).getAttribute("href");
+	}
 	
 	
 	protected List<WebElement> getOptionsOfMarketIndex() {
