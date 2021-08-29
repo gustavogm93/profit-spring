@@ -1,49 +1,30 @@
 package dev.abel.springbootdocker.scraping.country.application;
 
-import com.google.common.collect.ImmutableList;
 import com.mongodb.lang.Nullable;
-import dev.abel.springbootdocker.collections.country.CountryDTO;
 import dev.abel.springbootdocker.collections.country.CountryProp;
-import dev.abel.springbootdocker.collections.country.CountryService;
-import dev.abel.springbootdocker.collections.marketIndex.MarketIndexDTO;
-import dev.abel.springbootdocker.collections.marketIndex.MarketIndexProp;
-import dev.abel.springbootdocker.collections.region.RegionDTO;
-import dev.abel.springbootdocker.collections.region.RegionProp;
-import dev.abel.springbootdocker.collections.region.RegionService;
-import dev.abel.springbootdocker.collections.share.ShareProp;
-import dev.abel.springbootdocker.generics.Property;
 import dev.abel.springbootdocker.scraping.country.domain.*;
-import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataService;
-import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataServiceImpl;
 import dev.abel.springbootdocker.scraping.selenium.InvestmentEquityPage;
 import dev.abel.springbootdocker.utils.MapperUtils;
 import dev.abel.springbootdocker.utils.Msg;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
-public class ScrapingCountryScrapedData extends InvestmentEquityPage {
+public class ScrapingCountryData extends InvestmentEquityPage {
 
-    private RegionService regionService;
-    private CountryService countryService;
     private CountryScrapedDataService CountryScrapedDataService;
     private MapperUtils mapperUtils;
 
-    private static final Logger logger = LoggerFactory.getLogger(ScrapingCountryScrapedData.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScrapingCountryData.class);
 
-    public ScrapingCountryScrapedData(RegionService regionService, CountryService countryService, CountryScrapedDataService CountryScrapedDataService, MapperUtils mapperUtils) {
-        this.regionService = regionService;
-        this.countryService = countryService;
-        this.CountryScrapedDataService = CountryScrapedDataService;
+    public ScrapingCountryData(CountryScrapedDataService countryScrapedDataService, MapperUtils mapperUtils) {
+        CountryScrapedDataService = countryScrapedDataService;
         this.mapperUtils = mapperUtils;
     }
 

@@ -1,10 +1,11 @@
-package dev.abel.springbootdocker.scraping.company.infrastructure;
+package dev.abel.springbootdocker.scraping.company.application;
 
 import dev.abel.springbootdocker.scraping.company.domain.CompanyEncodedData;
 import dev.abel.springbootdocker.scraping.company.domain.Location;
+import dev.abel.springbootdocker.scraping.company.infrastructure.CompanyEncodedDataRepository;
 import dev.abel.springbootdocker.scraping.country.domain.CountryScrapedData;
 import dev.abel.springbootdocker.scraping.country.domain.EncodedShare;
-import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataService;
+import dev.abel.springbootdocker.scraping.country.application.CountryScrapedDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -59,10 +60,8 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         return this.mongoTemplate.find(query, CompanyEncodedData.class);
     }
 
-    
 
-
-    public void normalizeCompanyEncodedDataByRegion(String region) throws Exception {
+    public void normalize(String region) throws Exception {
         List<CompanyEncodedData> CompanyEncodedDataSUnncompleted = new ArrayList<>();
 
         /*TODO CHANGE FOR REAL NUMBER TOTAL

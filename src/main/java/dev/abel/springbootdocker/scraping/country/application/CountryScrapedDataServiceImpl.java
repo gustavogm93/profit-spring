@@ -1,12 +1,10 @@
-package dev.abel.springbootdocker.scraping.country.infrastructure;
+package dev.abel.springbootdocker.scraping.country.application;
 
-import dev.abel.springbootdocker.collections.country.CountryDTO;
 import dev.abel.springbootdocker.collections.country.CountryProp;
 import dev.abel.springbootdocker.collections.region.RegionDTO;
 import dev.abel.springbootdocker.collections.region.RegionService;
-import dev.abel.springbootdocker.collections.region.RegionServiceImpl;
-import dev.abel.springbootdocker.scraping.country.domain.DataSource;
 import dev.abel.springbootdocker.scraping.country.domain.CountryScrapedData;
+import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataRepository;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,7 @@ import java.util.Set;
 @Service
 public class CountryScrapedDataServiceImpl implements CountryScrapedDataService {
 
-    private final CountryScrapedDataRepository CountryScrapedDataRepository;
+    private final dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataRepository CountryScrapedDataRepository;
 
     private final RegionService regionService;
 
@@ -65,8 +63,7 @@ public class CountryScrapedDataServiceImpl implements CountryScrapedDataService 
     }
 
 
-
-    public void normalizeCountryScrapedData() {
+    public void normalize() {
         List<CountryScrapedData> CountryScrapedDataUnncompleted = new ArrayList<>();
 
         List<CountryScrapedData> totalCountryScrapedDataL = getAll();
@@ -92,14 +89,14 @@ public class CountryScrapedDataServiceImpl implements CountryScrapedDataService 
         }
         ;
         CountryScrapedDataRepository.saveAll(CountryScrapedDataUnncompleted);
-        logger.info("Html its successful normalized");
+        logger.info("Country Scraped Data is successful normalized");
     }
 
-    public List<CountryScrapedData> getHtmlUnncompleted(){
+    public List<CountryScrapedData> getHtmlUnncompleted() {
         Query query = new Query();
 
         Criteria criteria = new Criteria();
-        criteria.orOperator(Criteria.where("encodeData").is(null),Criteria.where("error").ne(null));
+        criteria.orOperator(Criteria.where("encodeData").is(null), Criteria.where("error").ne(null));
 
         query.addCriteria(criteria);
 

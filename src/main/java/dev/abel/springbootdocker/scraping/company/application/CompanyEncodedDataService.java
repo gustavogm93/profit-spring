@@ -1,7 +1,7 @@
-package dev.abel.springbootdocker.scraping.company.infrastructure;
+package dev.abel.springbootdocker.scraping.company.application;
 
 import dev.abel.springbootdocker.scraping.company.domain.CompanyEncodedData;
-import dev.abel.springbootdocker.scraping.country.domain.HtmlScraped;
+
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public interface CompanyEncodedDataService {
 
     public List<CompanyEncodedData> findByCode(String title);
 
-    public void normalizeCompanyEncodedDataByRegion(String region) throws Exception;
+    public void normalize(String region) throws Exception;
 
     public List<CompanyEncodedData> getHtmlUnncompleted();
 

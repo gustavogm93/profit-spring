@@ -1,4 +1,4 @@
-package dev.abel.springbootdocker.scraping.country.infrastructure;
+package dev.abel.springbootdocker.scraping.country.application;
 
 import dev.abel.springbootdocker.scraping.country.domain.CountryScrapedData;
 
@@ -14,7 +14,7 @@ public interface CountryScrapedDataService {
 
     public List<CountryScrapedData> findByTitle(String title);
 
-    public void normalizeCountryScrapedData();
+    public void normalize();
 
     public List<CountryScrapedData> getHtmlUnncompleted();
 }

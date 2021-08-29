@@ -1,6 +1,5 @@
 package dev.abel.springbootdocker.scraping;
 
-import dev.abel.springbootdocker.collections.country.CountryDTO;
 import dev.abel.springbootdocker.collections.country.CountryProp;
 import dev.abel.springbootdocker.collections.country.CountryService;
 import dev.abel.springbootdocker.collections.region.RegionDTO;
@@ -10,7 +9,6 @@ import dev.abel.springbootdocker.enums.RegionConstant;
 import dev.abel.springbootdocker.enums.utils.Url;
 import dev.abel.springbootdocker.scraping.jsoup.JsoupBase;
 import com.google.common.collect.ImmutableList;
-import org.apache.poi.ss.formula.functions.Count;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,20 +17,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.swing.plaf.synth.Region;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
 @Service
-public class ScrapingRegionStrategy implements JsoupBase {
+public class ScrapingInitialCountries implements JsoupBase {
 
-	private static final Logger logger = LoggerFactory.getLogger(ScrapingRegionStrategy.class);
+	private static final Logger logger = LoggerFactory.getLogger(ScrapingInitialCountries.class);
 	private static final String urlEquities = Url.equities;
 	
 	private final RegionService regionService;
@@ -40,7 +34,7 @@ public class ScrapingRegionStrategy implements JsoupBase {
 	private final CountryService countryService;
 
 	@Autowired
-	private ScrapingRegionStrategy(RegionService regionService, CountryService countryService) {
+	private ScrapingInitialCountries(RegionService regionService, CountryService countryService) {
 		this.regionService = regionService;
 		this.countryService = countryService;
 	}
