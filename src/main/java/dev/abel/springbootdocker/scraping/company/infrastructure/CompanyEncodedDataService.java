@@ -13,7 +13,11 @@ public interface CompanyEncodedDataService {
 
     public List<CompanyEncodedData> findByTitle(String title);
 
-    public void normalizeCompanyEncodedData();
+    public List<CompanyEncodedData> findByCode(String title);
+
+    public void normalizeCompanyEncodedDataByRegion(String region) throws Exception;
 
     public List<CompanyEncodedData> getHtmlUnncompleted();
+
+
 }

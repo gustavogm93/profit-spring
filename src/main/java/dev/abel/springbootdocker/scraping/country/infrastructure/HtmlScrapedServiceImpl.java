@@ -54,6 +54,18 @@ public class HtmlScrapedServiceImpl implements HtmlScrapedService {
         return this.mongoTemplate.find(query, HtmlScraped.class);
     }
 
+    public List<HtmlScraped> getByRegion(String regionTitle) {
+        Query query = new Query();
+
+        Criteria columnCriteria = Criteria.where("region.title").is(regionTitle);
+
+        query.addCriteria(columnCriteria);
+
+        return this.mongoTemplate.find(query, HtmlScraped.class);
+    }
+
+
+
     public void normalizeHtmlScraped() {
         List<HtmlScraped> htmlScrapedUnncompleted = new ArrayList<>();
 

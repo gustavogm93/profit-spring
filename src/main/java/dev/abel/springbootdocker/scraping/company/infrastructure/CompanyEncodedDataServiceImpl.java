@@ -4,8 +4,11 @@ import dev.abel.springbootdocker.collections.country.CountryProp;
 import dev.abel.springbootdocker.collections.region.RegionDTO;
 import dev.abel.springbootdocker.collections.region.RegionService;
 import dev.abel.springbootdocker.scraping.company.domain.CompanyEncodedData;
-import dev.abel.springbootdocker.scraping.country.domain.CompanyEncodedDataS;
+import dev.abel.springbootdocker.scraping.company.domain.Location;
 import dev.abel.springbootdocker.scraping.country.domain.EncodedData;
+import dev.abel.springbootdocker.scraping.country.domain.EncodedShare;
+import dev.abel.springbootdocker.scraping.country.domain.HtmlScraped;
+import dev.abel.springbootdocker.scraping.country.infrastructure.HtmlScrapedService;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +20,22 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService {
 
     private final CompanyEncodedDataRepository companyEncodedDataRepository;
 
-    private final EncodedData encodedData;
+    private final HtmlScrapedService htmlScrapedService;
 
     private final MongoTemplate mongoTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(CompanyEncodedDataServiceImpl.class);
 
-    public CompanyEncodedDataServiceImpl(CompanyEncodedDataRepository companyEncodedDataRepository, RegionService regionService, MongoTemplate mongoTemplate) {
+    public CompanyEncodedDataServiceImpl(CompanyEncodedDataRepository companyEncodedDataRepository, HtmlScrapedService htmlScrapedService, MongoTemplate mongoTemplate) {
         this.companyEncodedDataRepository = companyEncodedDataRepository;
-        this.regionService = regionService;
+        this.htmlScrapedService = htmlScrapedService;
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -46,47 +50,64 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
     public List<CompanyEncodedData> findByTitle(String title) {
         Query query = new Query();
 
-        Criteria columnCriteria = Criteria.where("country.title").is(title);
+        Criteria columnCriteria = Criteria.where("title").is(title);
 
         query.addCriteria(columnCriteria);
 
         return this.mongoTemplate.find(query, CompanyEncodedData.class);
     }
 
-    public void normalizeCompanyEncodedData() {
+    public List<CompanyEncodedData> findByCode(String code) {
+        Query query = new Query();
+
+        Criteria columnCriteria = Criteria.where("code").is(code);
+
+        query.addCriteria(columnCriteria);
+
+        return this.mongoTemplate.find(query, CompanyEncodedData.class);
+    }
+
+
+
+    public void normalizeCompanyEncodedDataByRegion(String region) throws Exception {
         List<CompanyEncodedData> CompanyEncodedDataSUnncompleted = new ArrayList<>();
 
-        List<CompanyEncodedData> totalCompanyEncodedDataSL = getAll();
+        /*TODO CHANGE FOR REAL NUMBER TOTAL
         if (totalCompanyEncodedDataSL.size() > 93) {
             logger.warn("Html was normalized");
             return;
-        }
+        }*/
 
+        List<HtmlScraped> htmls = htmlScrapedService.getByRegion(region).stream().filter(html -> html.getEncodeData() != null).collect(Collectors.toList());
 
-        List<RegionDTO> regions = regionService.getAll();
-        for (RegionDTO region : regions) {
-            @NonNull Set<CountryProp> countries = region.getCountries();
+        for (HtmlScraped html : htmls) {
+            List<EncodedShare> shares = html.getEncodeData().getAllSharesMarketIndex().getShares();
 
-            for (CountryProp country : countries) {
-                List<CompanyEncodedData> CompanyEncodedDataSL = findByTitle(country.getTitle());
+            for(EncodedShare share : shares) {
 
-                if (CompanyEncodedDataSL.isEmpty()) {
-                    CompanyEncodedData CompanyEncodedDataS = new CompanyEncodedData(country, region.getProperties());
-                    CompanyEncodedDataSUnncompleted.add(CompanyEncodedDataS);
-                }
+                String countryTitle = html.getCountry().getTitle();
+                String countryCode = html.getCountry().getCode();
+                String regionTitle = html.getRegion().getTitle();
+                String regionCode = html.getRegion().getCode();
 
+                Location location = new Location(countryTitle, countryCode, regionTitle, regionCode);
+                CompanyEncodedData CompanyEncodedDataS = new CompanyEncodedData(share.getTitle(),share.getCode(), location);
+
+                companyEncodedDataRepository.save(CompanyEncodedDataS);
             }
+
         }
-        ;
+
         companyEncodedDataRepository.saveAll(CompanyEncodedDataSUnncompleted);
-        logger.info("Html its successful normalized");
+        logger.info("companyEncodedData its successful normalized");
     }
 
-    public List<CompanyEncodedData> getHtmlUnncompleted(){
+
+    public List<CompanyEncodedData> getHtmlUnncompleted() {
         Query query = new Query();
 
         Criteria criteria = new Criteria();
-        criteria.orOperator(Criteria.where("encodeData").is(null),Criteria.where("error").ne(null));
+        criteria.orOperator(Criteria.where("encodeData").is(null), Criteria.where("error").ne(null));
 
         query.addCriteria(criteria);
 

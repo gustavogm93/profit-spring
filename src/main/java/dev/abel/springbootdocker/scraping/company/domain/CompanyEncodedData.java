@@ -4,6 +4,7 @@ import dev.abel.springbootdocker.collections.country.CountryProp;
 import dev.abel.springbootdocker.collections.region.RegionProp;
 import dev.abel.springbootdocker.enums.utils.Url;
 import lombok.Data;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -17,20 +18,17 @@ public class CompanyEncodedData {
     @Id
     private String id;
 
-    @Field("country")
-    private CountryProp country;
-
-    @Field("region")
-    private RegionProp region;
+    @Field("location")
+    private @NonNull Location location;
 
     @Field("title")
-    private String title;
+    private @NonNull String title;
 
     @Field("code")
-    private String code;
+    private @NonNull String code;
 
     @Field("currency")
-    private String currency;
+    private @NonNull String currency;
 
     @Field("encodedProfile")
     private EncodedProfile encodedProfile;
@@ -50,12 +48,11 @@ public class CompanyEncodedData {
     @Field("errors")
     private String errors;
 
-    public CompanyEncodedData(String title, String companyCode, CountryProp country, RegionProp region, Date lastUpdateAt) {
+    public CompanyEncodedData(@NonNull String title, @NonNull String companyCode, @NonNull Location location) {
         this.title = title;
         this.code = companyCode;
-        this.country = country;
-        this.region = region;
-        this.lastUpdateAt = lastUpdateAt;
+        this.location = location;
+        this.lastUpdateAt = new Date();
         this.urls = new Urls(companyCode);
     }
 

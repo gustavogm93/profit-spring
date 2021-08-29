@@ -24,4 +24,15 @@ public class EncodedData {
         this.encodeCountry = encodeCountry;
         this.encodedMarketIndex = encodedMarketIndex;
     }
+
+    public EncodedMarketIndex getAllSharesMarketIndex() throws Exception {
+
+        EncodedMarketIndex encodedMarketindex = this.encodedMarketIndex.stream().filter(enc -> enc.getCode().equalsIgnoreCase("all")).findFirst().get();
+        if(encodedMarketindex == null)
+            throw new Exception(String.format("Country:  %s, not have all shares", encodeCountry.getTitle()));
+
+
+        return encodedMarketindex;
+    }
+
 }

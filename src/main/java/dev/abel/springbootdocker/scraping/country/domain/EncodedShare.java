@@ -1,9 +1,11 @@
 package dev.abel.springbootdocker.scraping.country.domain;
 
 import dev.abel.springbootdocker.utils.GenerateUUID;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Data
 public class EncodedShare {
 
     @Id

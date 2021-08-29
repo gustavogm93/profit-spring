@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CompanyService {
-
+/*
 	public ScrapingFetchImpl ScrapingFetch;
 
 	@Autowired
@@ -70,7 +70,7 @@ public class CompanyService {
 
 	public void sender(Flow companyOperation) {
 
-	}
+	}*/
 }
 
 //
