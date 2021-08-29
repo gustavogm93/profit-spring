@@ -1,41 +1,33 @@
 package dev.abel.springbootdocker.scraping.company.infrastructure;
 
-import dev.abel.springbootdocker.collections.country.CountryProp;
-import dev.abel.springbootdocker.collections.region.RegionDTO;
-import dev.abel.springbootdocker.collections.region.RegionService;
 import dev.abel.springbootdocker.scraping.company.domain.CompanyEncodedData;
 import dev.abel.springbootdocker.scraping.company.domain.Location;
-import dev.abel.springbootdocker.scraping.country.domain.EncodedData;
+import dev.abel.springbootdocker.scraping.country.domain.CountryScrapedData;
 import dev.abel.springbootdocker.scraping.country.domain.EncodedShare;
-import dev.abel.springbootdocker.scraping.country.domain.HtmlScraped;
-import dev.abel.springbootdocker.scraping.country.infrastructure.HtmlScrapedService;
-import lombok.NonNull;
+import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService {
 
     private final CompanyEncodedDataRepository companyEncodedDataRepository;
 
-    private final HtmlScrapedService htmlScrapedService;
+    private final CountryScrapedDataService countryScrapedDataService;
 
     private final MongoTemplate mongoTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(CompanyEncodedDataServiceImpl.class);
 
-    public CompanyEncodedDataServiceImpl(CompanyEncodedDataRepository companyEncodedDataRepository, HtmlScrapedService htmlScrapedService, MongoTemplate mongoTemplate) {
+    public CompanyEncodedDataServiceImpl(CompanyEncodedDataRepository companyEncodedDataRepository, CountryScrapedDataService countryScrapedDataService, MongoTemplate mongoTemplate) {
         this.companyEncodedDataRepository = companyEncodedDataRepository;
-        this.htmlScrapedService = htmlScrapedService;
+        this.countryScrapedDataService = countryScrapedDataService;
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -67,6 +59,7 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         return this.mongoTemplate.find(query, CompanyEncodedData.class);
     }
 
+    
 
 
     public void normalizeCompanyEncodedDataByRegion(String region) throws Exception {
@@ -78,9 +71,9 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
             return;
         }*/
 
-        List<HtmlScraped> htmls = htmlScrapedService.getByRegion(region).stream().filter(html -> html.getEncodeData() != null).collect(Collectors.toList());
+        List<CountryScrapedData> htmls = countryScrapedDataService.getByRegion(region);
 
-        for (HtmlScraped html : htmls) {
+        for (CountryScrapedData html : htmls) {
             List<EncodedShare> shares = html.getEncodeData().getAllSharesMarketIndex().getShares();
 
             for(EncodedShare share : shares) {
@@ -99,7 +92,7 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         }
 
         companyEncodedDataRepository.saveAll(CompanyEncodedDataSUnncompleted);
-        logger.info("companyEncodedData its successful normalized");
+        logger.info("Html its successful normalized");
     }
 
 

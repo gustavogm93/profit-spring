@@ -10,9 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "htmlScraped")
+@Document(collection = "CountryScrapedData")
 @Data
-public class HtmlScraped {
+public class CountryScrapedData {
 
     @Id
     private String id;
@@ -35,12 +35,12 @@ public class HtmlScraped {
     @Field("lastUpdate")
     private Date lastUpdate;
 
-    public HtmlScraped(CountryProp country, RegionProp region) {
+    public CountryScrapedData(CountryProp country, RegionProp region) {
         this.country = country;
         this.region = region;
     }
 
-    public boolean fillHtmlScraped(EncodedData encodeData){
+    public boolean fillCountryScrapedData(EncodedData encodeData){
         if(this.encodeData != null) {
             this.previousEncodedData = this.encodeData;
             this.encodeData = null;

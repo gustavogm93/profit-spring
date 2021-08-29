@@ -2,10 +2,8 @@ package dev.abel.springbootdocker.controller;
 
 import dev.abel.springbootdocker.scraping.ScrapingRegionStrategy;
 import dev.abel.springbootdocker.scraping.company.infrastructure.CompanyEncodedDataService;
-import dev.abel.springbootdocker.scraping.country.application.ScrapingHtml;
-import dev.abel.springbootdocker.scraping.country.domain.HtmlScraped;
-import dev.abel.springbootdocker.scraping.country.infrastructure.DataSourceService;
-import dev.abel.springbootdocker.scraping.country.infrastructure.HtmlScrapedService;
+import dev.abel.springbootdocker.scraping.country.application.ScrapingCountryScrapedData;
+import dev.abel.springbootdocker.scraping.country.infrastructure.CountryScrapedDataService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,31 +20,17 @@ import java.util.List;
 @Component
 public class ScrapingController {
 
-	@Value("${chrome.driver.path}")
-	private String ChromeDriverPathResource;
-	private DataSourceService dataSourceService;
 	private ScrapingRegionStrategy scrapingRegion;
-	private HtmlScrapedService htmlScrapedService;
+	private CountryScrapedDataService countryScrapedDataService;
 	private CompanyEncodedDataService companyEncodedDataService;
+	private ScrapingCountryScrapedData scrapingCountryScrapedData;
 
-	private ScrapingHtml scrapingHtml;
-	/*private ScrapingCountryStrategy scrapingCountry;
-	
-	 private ScrapingCoverageStrategy scrapingCoverageCountry;
-	
-	@Autowired
-	public ScrapingController(ScrapingCountryStrategy scrapingCountry, ScrapingRegionStrategy scrapingRegion, ScrapingCoverageStrategy scrapingCoverageCountry ) {
-		this.scrapingCountry = scrapingCountry;
+	public ScrapingController(ScrapingRegionStrategy scrapingRegion, CountryScrapedDataService countryScrapedDataService,
+							  CompanyEncodedDataService companyEncodedDataService, ScrapingCountryScrapedData scrapingCountryScrapedData) {
 		this.scrapingRegion = scrapingRegion;
-		this.scrapingCoverageCountry = scrapingCoverageCountry;
-	}*/
-
-	public ScrapingController(DataSourceService dataSourceService, ScrapingRegionStrategy scrapingRegion, HtmlScrapedService htmlScrapedService, CompanyEncodedDataService companyEncodedDataService, ScrapingHtml scrapingHtml) {
-		this.dataSourceService = dataSourceService;
-		this.scrapingRegion = scrapingRegion;
-		this.htmlScrapedService = htmlScrapedService;
+		this.countryScrapedDataService = countryScrapedDataService;
 		this.companyEncodedDataService = companyEncodedDataService;
-		this.scrapingHtml = scrapingHtml;
+		this.scrapingCountryScrapedData = scrapingCountryScrapedData;
 	}
 
 	@GetMapping("/regions")
@@ -60,14 +44,10 @@ public class ScrapingController {
 
 	@GetMapping("/normalize/html")
 	public void normalizeHtml() throws Exception, IOException {
-		htmlScrapedService.normalizeHtmlScraped();
+		countryScrapedDataService.normalizeCountryScrapedData();
 	}
 
-	@GetMapping("/normalize/null")
-	public void normalizeNull() throws Exception, IOException {
-		List<HtmlScraped> un = htmlScrapedService.getHtmlUnncompleted();
-		System.out.println(un.size());
-	}
+
 
 	@GetMapping("/html")
 	public void getCoverageCountryExtractedData(@RequestParam( "region") String region) throws Exception {
