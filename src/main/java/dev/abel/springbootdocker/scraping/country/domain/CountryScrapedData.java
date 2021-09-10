@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "CountryScrapedData")
+@Document(collection = "countryScrapedData")
 @Data
 public class CountryScrapedData {
 

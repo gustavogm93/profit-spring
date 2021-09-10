@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService {
@@ -71,6 +72,7 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         }*/
 
         List<CountryScrapedData> htmls = countryScrapedDataService.getByRegion(region);
+        htmls = htmls.stream().filter(html-> html.getEncodeData() != null).collect(Collectors.toList());
 
         for (CountryScrapedData html : htmls) {
             List<EncodedShare> shares = html.getEncodeData().getAllSharesMarketIndex().getShares();
@@ -91,7 +93,8 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         }
 
         companyEncodedDataRepository.saveAll(CompanyEncodedDataSUnncompleted);
-        logger.info("Html its successful normalized");
+        logger.info("Company is successful normalized");
+
     }
 
 

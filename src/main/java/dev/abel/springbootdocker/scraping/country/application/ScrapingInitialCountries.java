@@ -1,4 +1,4 @@
-package dev.abel.springbootdocker.scraping;
+package dev.abel.springbootdocker.scraping.country.application;
 
 import dev.abel.springbootdocker.collections.country.CountryProp;
 import dev.abel.springbootdocker.collections.country.CountryService;

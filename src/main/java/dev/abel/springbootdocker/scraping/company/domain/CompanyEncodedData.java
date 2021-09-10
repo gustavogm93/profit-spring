@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
-@Document(collection = "CompanyEncodedData")
+@Document(collection = "CompanyScrapedData")
 @Data
 public class CompanyEncodedData {
 

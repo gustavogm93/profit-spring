@@ -1,6 +1,6 @@
 package dev.abel.springbootdocker.scraping.country.infrastructure;
 
-import dev.abel.springbootdocker.scraping.ScrapingInitialCountries;
+import dev.abel.springbootdocker.scraping.country.application.ScrapingInitialCountries;
 import dev.abel.springbootdocker.scraping.country.application.CountryScrapedDataService;
 import dev.abel.springbootdocker.scraping.country.application.ScrapingCountryData;
 import lombok.Data;
