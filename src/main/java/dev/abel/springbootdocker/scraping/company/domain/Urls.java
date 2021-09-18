@@ -13,13 +13,13 @@ public class Urls {
     @Field("financialSummary")
     private String financialSummary;
 
-
-    public Urls(String companyCode) {
-        this.profile = buildSummaryUrl(companyCode);
-        this.financialSummary = buildProfileUrl(companyCode);
+    public Urls(String profile, String financialSummary) {
+        this.profile = profile;
+        this.financialSummary = financialSummary;
     }
 
-    public String buildSummaryUrl(String codeCompany) {
+
+    public static String buildSummaryUrl(String codeCompany) {
 
         StringBuilder summaryUrl = new StringBuilder();
 
@@ -28,11 +28,11 @@ public class Urls {
         return summaryUrl.toString();
     }
 
-    public String buildProfileUrl(String codeCompany) {
+    public static String buildProfileUrl(String url) {
 
         StringBuilder summaryUrl = new StringBuilder();
-
-        summaryUrl.append(Url.profile.replace("#", codeCompany));
+        summaryUrl.append(url);
+        summaryUrl.append("-company-profile");
 
         return summaryUrl.toString();
 

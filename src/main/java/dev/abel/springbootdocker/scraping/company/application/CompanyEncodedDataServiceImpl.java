@@ -1,6 +1,6 @@
 package dev.abel.springbootdocker.scraping.company.application;
 
-import dev.abel.springbootdocker.scraping.company.domain.CompanyEncodedData;
+import dev.abel.springbootdocker.scraping.company.domain.CompanyScrapedData;
 import dev.abel.springbootdocker.scraping.company.domain.Location;
 import dev.abel.springbootdocker.scraping.company.infrastructure.CompanyEncodedDataRepository;
 import dev.abel.springbootdocker.scraping.country.domain.CountryScrapedData;
@@ -33,37 +33,37 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<CompanyEncodedData> getAll() {
+    public List<CompanyScrapedData> getAll() {
         return companyEncodedDataRepository.findAll();
     }
 
-    public void add(CompanyEncodedData CompanyEncodedDataS) {
+    public void add(CompanyScrapedData CompanyEncodedDataS) {
         companyEncodedDataRepository.save(CompanyEncodedDataS);
     }
 
-    public List<CompanyEncodedData> findByTitle(String title) {
+    public List<CompanyScrapedData> findByTitle(String title) {
         Query query = new Query();
 
         Criteria columnCriteria = Criteria.where("title").is(title);
 
         query.addCriteria(columnCriteria);
 
-        return this.mongoTemplate.find(query, CompanyEncodedData.class);
+        return this.mongoTemplate.find(query, CompanyScrapedData.class);
     }
 
-    public List<CompanyEncodedData> findByCode(String code) {
+    public List<CompanyScrapedData> findByCode(String code) {
         Query query = new Query();
 
         Criteria columnCriteria = Criteria.where("code").is(code);
 
         query.addCriteria(columnCriteria);
 
-        return this.mongoTemplate.find(query, CompanyEncodedData.class);
+        return this.mongoTemplate.find(query, CompanyScrapedData.class);
     }
 
 
     public void normalize(String region) throws Exception {
-        List<CompanyEncodedData> CompanyEncodedDataSUnncompleted = new ArrayList<>();
+        List<CompanyScrapedData> CompanyEncodedDataSUnncompleted = new ArrayList<>();
 
         /*TODO CHANGE FOR REAL NUMBER TOTAL
         if (totalCompanyEncodedDataSL.size() > 93) {
@@ -85,8 +85,8 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
                 String regionCode = html.getRegion().getCode();
 
                 Location location = new Location(countryTitle, countryCode, regionTitle, regionCode);
-                CompanyEncodedData CompanyEncodedDataS = new CompanyEncodedData(share.getTitle(),share.getCode(), location);
-
+                CompanyScrapedData CompanyEncodedDataS = new CompanyScrapedData(share.getTitle(),share.getCode(), location);
+                CompanyEncodedDataS.generateUrls(share.getUrl());
                 companyEncodedDataRepository.save(CompanyEncodedDataS);
             }
 
@@ -98,15 +98,16 @@ public class CompanyEncodedDataServiceImpl implements CompanyEncodedDataService 
     }
 
 
-    public List<CompanyEncodedData> getHtmlUnncompleted() {
+
+    public List<CompanyScrapedData> getUncommpletedByRegion(String regionTitle) {
         Query query = new Query();
 
-        Criteria criteria = new Criteria();
-        criteria.orOperator(Criteria.where("encodeData").is(null), Criteria.where("error").ne(null));
+        Criteria columnCriteria = Criteria.where("location.regionTitle").is(regionTitle);
+        columnCriteria.orOperator(Criteria.where("encodeData").is(null), Criteria.where("error").ne(null));
+        System.out.println(columnCriteria);
+        query.addCriteria(columnCriteria);
 
-        query.addCriteria(criteria);
-
-        return this.mongoTemplate.find(query, CompanyEncodedData.class);
+        return this.mongoTemplate.find(query, CompanyScrapedData.class);
     }
 
 }

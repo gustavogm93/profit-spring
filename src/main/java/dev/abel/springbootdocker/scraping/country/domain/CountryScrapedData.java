@@ -35,12 +35,14 @@ public class CountryScrapedData {
     @Field("lastUpdate")
     private Date lastUpdate;
 
-    public CountryScrapedData(CountryProp country, RegionProp region) {
+    public CountryScrapedData(String id, CountryProp country, RegionProp region) {
+        this.id = id;
         this.country = country;
         this.region = region;
     }
 
     public boolean fillCountryScrapedData(EncodedData encodeData){
+        //Previuous encode data for have a backup
         if(this.encodeData != null) {
             this.previousEncodedData = this.encodeData;
             this.encodeData = null;

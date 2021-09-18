@@ -1,42 +1,65 @@
 package dev.abel.springbootdocker.scraping.company.application;
 
-import dev.abel.springbootdocker.enums.utils.Url;
+import dev.abel.springbootdocker.collections.region.RegionService;
+import dev.abel.springbootdocker.scraping.company.domain.*;
+import dev.abel.springbootdocker.scraping.country.domain.EncodedData;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+@Service
 public class ScrapingCompanyStrategy {
-/*
 
-    public void run() {
-        Document doc;
-        try {
-            doc = Jsoup.connect(buildProfileUrl(companyTitle)).get();
+    RegionService regionService;
+    CompanyEncodedDataService companyEncodedDataService;
+    FetchingFinancialSummary fetchingFinancialsSummary;
+    public ScrapingCompanyStrategy(RegionService regionService, CompanyEncodedDataService companyEncodedDataService,FetchingFinancialSummary fetchingFinancialsSummary) {
+        this.regionService = regionService;
+        this.companyEncodedDataService = companyEncodedDataService;
+        this.fetchingFinancialsSummary = fetchingFinancialsSummary;
+    }
 
-            Element elementIndustry = doc.select(":containsOwn(Industry)").first();
-            Element elementSector = doc.select(":containsOwn(Sector)").first();
+    public void run(String regionTitle) {
 
-        } catch (IOException e) {
+        List<CompanyScrapedData> companyEncodedList = companyEncodedDataService.getUncommpletedByRegion(regionTitle);
 
-            e.printStackTrace();
-
+        for(CompanyScrapedData companyScrapedDataBase: companyEncodedList){
+            Elements elements = getElements(companyScrapedDataBase);
+            if(elements == null || elements.size() < 3){
+                continue;
+            }
+            EncodedIncomeStatement encodedIncomeStatement = fetchingFinancialsSummary.getIncomeStatementData(elements.get(0));
+            EncodedBalanceSheet encodedBalanceData = fetchingFinancialsSummary.getBalancedSheetData(elements.get(1));
+            EncodedCashFlow encodedCashFlow =  fetchingFinancialsSummary.getCashFlowData(elements.get(2));
 
         }
+    }
 
+public Elements getElements(CompanyScrapedData companyScrapedDataBase){
+    String urlSummary = companyScrapedDataBase.getUrls().getFinancialSummary();
+    Document doc;
+    try {
+        doc = Jsoup.connect(urlSummary).get();
+
+        Elements elements = doc.select("div.companySummaryIncomeStatement");
+        if (elements == null) {
+            companyScrapedDataBase.fullIfEmptyHtml();
+            return null;
+        }
+
+        return elements;
+        } catch (Exception e) {
+        companyScrapedDataBase.fullIfEmptyHtml();
+        return null;
+    }
 
     }
 
 
-    public String buildProfileUrl(String companyTitle) {
-
-        StringBuilder summaryUrl = new StringBuilder();
-
-        summaryUrl.append(Url.profile.replace("#", companyTitle));
-
-        return summaryUrl.toString();
-    }
-*/
 }

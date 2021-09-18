@@ -81,7 +81,7 @@ public class CountryScrapedDataServiceImpl implements CountryScrapedDataService 
                 List<CountryScrapedData> CountryScrapedDataL = findByTitle(country.getTitle());
 
                 if (CountryScrapedDataL.isEmpty()) {
-                    CountryScrapedData CountryScrapedData = new CountryScrapedData(country, region.getProperties());
+                    CountryScrapedData CountryScrapedData = new CountryScrapedData(country.getCode(), country, region.getProperties());
                     CountryScrapedDataUnncompleted.add(CountryScrapedData);
                 }
 
