@@ -52,30 +52,30 @@ public class EncodedBalanceSheet {
     }
 
     public String verifyValidEncoded() {
+        StringBuilder strBl = new StringBuilder();
 
         if (totalAssets.isEmpty()) {
-            return "totalAssets is empty";
+            strBl.append("totalAssets is empty");
         }
         if (totalLiabilities.isEmpty()) {
-            return "totalLiabilities is empty";
+            strBl.append("totalLiabilities is empty");
         }
         if (totalEquity.isEmpty()) {
-            return "totalEquity is empty";
+            strBl.append("totalEquity is empty");
         }
         if (quickRatio.isEmpty()) {
-            return "quickRatio is empty";
+            strBl.append("quickRatio is empty");
         }
         if (currentRatio.isEmpty()) {
-            return "currentRatio is empty";
+            strBl.append("currentRatio is empty");
         }
         if (lTDebtToEquity.isEmpty()) {
-            return "LTDebtToEquity is empty";
+            strBl.append("LTDebtToEquity is empty");
         }
         if (total_Debt_to_Equity.isEmpty()) {
-            return "total_Debt_to_Equity Cash Flow is empty";
+            strBl.append("total_Debt_to_Equity Cash Flow is empty");
         }
 
-
-        return "true";
+        return strBl.length() > 0 ? strBl.toString() : "true";
     }
 }

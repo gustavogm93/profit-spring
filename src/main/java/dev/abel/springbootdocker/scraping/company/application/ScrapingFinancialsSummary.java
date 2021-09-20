@@ -16,6 +16,7 @@ class FetchingFinancialSummary {
 
     public FetchingFinancialSummary() {}
 
+
     public EncodedIncomeStatement getIncomeStatementData(Element incomeStatementElement ) {
         EncodedIncomeStatement encodedIncomeStatement = new EncodedIncomeStatement();
         Elements percentageFinancialSummaryValues = incomeStatementElement.select("div.float_lang_base_2").select("div.infoLine");

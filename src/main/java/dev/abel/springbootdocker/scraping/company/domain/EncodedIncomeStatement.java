@@ -56,34 +56,34 @@ public class EncodedIncomeStatement {
     }
 
     public String verifyValidEncoded() {
+        StringBuilder stringBuffer = new StringBuilder();
 
         if (totalRevenue.isEmpty()) {
-            return "totalRevenue title is empty";
+            stringBuffer.append("totalRevenue title is empty-");
         }
         if (grossProfit.isEmpty()) {
-            return "grossProfit title is empty";
+            stringBuffer.append("grossProfit title is empty-");
         }
         if (operatingIncome.isEmpty()) {
-            return "operatingIncome title is empty";
+            stringBuffer.append("operatingIncome title is empty-");
         }
         if (netIncome.isEmpty()) {
-            return "netIncome title is empty";
+            stringBuffer.append("netIncome title is empty-");
         }
 
         if (grossMargin.isEmpty()) {
-            return "grossMargin title is empty";
+            stringBuffer.append("grossMargin title is empty-");
         }
         if (OperatingMargin.isEmpty()) {
-            return "OperatingMargin title is empty";
+            stringBuffer.append("OperatingMargin title is empty-");
         }
         if (NetProfitMargin.isEmpty()) {
-            return "NetProfitMargin title is empty";
+            stringBuffer.append("NetProfitMargin title is empty-");
         }
         if (ReturnOnInvestment.isEmpty()) {
-            return "ReturnOnInvestment title is empty";
+            stringBuffer.append("ReturnOnInvestment title is empty-");
         }
-
-        return "true";
+        return stringBuffer.length() > 0 ? stringBuffer.toString() : "true";
 
     }
 }

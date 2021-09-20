@@ -52,33 +52,35 @@ public class EncodedCashFlow {
     }
 
     public String verifyValidEncoded() {
+        StringBuilder strBr = new StringBuilder();
+
         if (CashFromOperatingActivities.isEmpty()) {
-            return "CashFromOperatingActivities is empty";
+            strBr.append("CashFromOperatingActivities is empty");
         }
         if (CashFromInvestingActivities.isEmpty()) {
-            return "CashFromInvestingActivities is empty";
+            strBr.append("CashFromInvestingActivities is empty");
         }
 
         if (CashFromFinancingActivities.isEmpty()) {
-            return "CashFromFinancingActivities is empty";
+            strBr.append("CashFromFinancingActivities is empty");
         }
 
         if (NetChangeInCash.isEmpty()) {
-            return "netChangeInCash is empty";
+            strBr.append("netChangeInCash is empty");
         }
 
         if (Cash_FlowByShare.isEmpty()) {
-            return "cash_FlowByShare is empty";
+            strBr.append("cash_FlowByShare is empty");
         }
 
         if (RevenueByShare.isEmpty()) {
-            return "revenueByShare is empty";
+            strBr.append("revenueByShare is empty");
         }
         if (Operating_Cash_Flow.isEmpty()) {
-            return "operating Cash Flow is empty";
+            strBr.append("operating Cash Flow is empty");
         }
 
 
-        return "true";
+        return strBr.length() > 0 ? strBr.toString() : "true";
     }
 }

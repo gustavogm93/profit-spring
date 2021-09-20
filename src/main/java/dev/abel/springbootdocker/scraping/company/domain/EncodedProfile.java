@@ -21,37 +21,39 @@ public class EncodedProfile {
     @Field("equityType")
     private String equityType;
 
+    @Field("currency")
+    private String currency;
 
-
-    public EncodedProfile(String industry, String sector, String employees, String equityType) {
+    public EncodedProfile(String industry, String sector, String employees, String equityType, String currency) {
         this.industry = industry;
         this.sector = sector;
         this.employees = employees;
         this.equityType = equityType;
+        this.currency = currency;
     }
 
-
     public String verifyValidEncoded() {
+        StringBuffer stringBuffer = new StringBuffer();
+
         if (industry.isEmpty()) {
-            return "industry title is empty";
+            stringBuffer.append("industry title is empty");
         }
 
         if (sector.isEmpty()) {
-            return "sector title is empty";
+            stringBuffer.append("sector title is empty");
         }
 
         if (employees.isEmpty()) {
-            return "employees title is empty";
+            stringBuffer.append("employees title is empty");
         }
 
         if (equityType.isEmpty()) {
-            return "equityType title is empty";
+            stringBuffer.append("equityType title is empty");
         }
 
         if (equityType.isEmpty()) {
-            return "equityType title is empty";
+            stringBuffer.append("equityType title is empty");
         }
-
-        return "true";
+        return stringBuffer.length() > 0 ? stringBuffer.toString() : "true";
     }
 }
