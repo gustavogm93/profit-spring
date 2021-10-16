@@ -51,6 +51,4 @@ docker run --name spring-boot-docker -p 8080:8080 spring-boot-docker:latest
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 
-## Authors
 
-* **Abel Fresnillo** - [abel-fresnillo](https://github.com/abel-fresnillo)
